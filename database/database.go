@@ -15,8 +15,6 @@ func GetConnection() {
 		panic(err)
 	}
 
-	db.Migrator().CreateConstraint(&models.Result{}, "Hobby")
-	db.Migrator().CreateConstraint(&models.Result{}, "hobbies")
 	db.AutoMigrate(&models.User{}, &models.Hobby{}, &models.MapUserHobby{})
 
 	DB = db
