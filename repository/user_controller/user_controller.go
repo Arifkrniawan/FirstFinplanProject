@@ -31,15 +31,29 @@ func Create(c *gin.Context) {
 
 func Show(c *gin.Context) {
 	var users models.User
+	var results models.Result
 
 	id := c.Query("id")
 	fmt.Println("PAMRAM ID: ", id)
 
-	if err := database.DB.Model(&users).Preload("MapUserHobby").Where("id=?", id).Scan(&users).Error; err != nil {
+	if err := database.DB.Where("id = ?", id).First(&users).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "CANT FOUND DATA"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"Data": users})
+
+	if err := database.DB.Table("hobbies").Select("hobbies.*").
+		Joins("INNER JOIN map_user_hobbies ON hobbies.id = map_user_hobbies.id_hobby").
+		Where("map_user_hobbies.id_user = ?", id).Scan(&results.Hobby).Error; err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "CANT FOUND DATA"})
+		return
+	}
+
+	results.Id = users.Id
+	results.Name = users.Name
+	results.Gender = users.Gender
+	results.Status = users.Status
+
+	c.JSON(http.StatusOK, gin.H{"Data": results})
 }
 
 func Update(c *gin.Context) {

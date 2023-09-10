@@ -1,8 +1,9 @@
 package models
 
 type Result struct {
-	Id     uint8  `gorm:"primaryKey;autoIncrement" json:"id"`
-	Name   string `gorm:"type:varchar(100);NOT_NULL" json:"name"`
-	Gender string `gorm:"type:varchar(100)" json:"gender"`
-	Status string `gorm:"type:varchar(100);NOT_NULL" json:"status"`
+	Id     uint8  `json:"id"`
+	Name   string `json:"name"`
+	Gender string `json:"gender"`
+	Status string `json:"status"`
+	Hobby  []Hobby
 }
