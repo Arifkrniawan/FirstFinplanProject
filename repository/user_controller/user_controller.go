@@ -1,7 +1,6 @@
 package user_controller
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/Arifkrniawan/FirstFinplanProject/database"
@@ -34,7 +33,6 @@ func Show(c *gin.Context) {
 	var results models.Result
 
 	id := c.Query("id")
-	fmt.Println("PAMRAM ID: ", id)
 
 	if err := database.DB.Where("id = ?", id).First(&users).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"message": "CANT FOUND DATA"})
